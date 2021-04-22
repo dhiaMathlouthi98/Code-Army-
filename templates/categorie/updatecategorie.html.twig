@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" style="margin-left:auto; margin-right: auto; background-image: url('https://i.ibb.co/6HfnTgB/back1.jpg'); background-repeat: no-repeat; background-size: 1100px 1000px ">
+<head>
+    {% extends 'base.html.twig' %}
+    {% block title%} Modifier Une Catégorie{% endblock %}
+
+    {% block body %}
+        <div style="margin-top: 200px; margin-left: 5px">
+            <div class="titre" style="margin-left: 350px;margin-top:100px ">
+                <h1>Ajouter Une Catégorie</h1>
+            </div>
+            <hr style="visibility: hidden ">
+            <div style="margin-left: 50px">
+                {{ form(form)   }}
+            </div>
+
+
+        </div>
+
+
+    {% endblock %}
