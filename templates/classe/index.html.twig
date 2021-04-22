@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block title%}Liste des notes{% endblock %}
+
+
+{% block body %}
+
+
+    {% if classes %}
+<h3>Choisir la classe</h3>
+
+        <div class="container" style="padding-right: 900px ; padding-bottom: 50px; ">
+    <select name="secteur" autofocus class="form-control" id="supervisor">
+        {% for classe in classes %}
+            <option selected >{{  classe.getNomClasse }}</option>
+        {% endfor %}
+
+    </select>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}Ajouter Note{% endblock %}
+{% block body %}
+    <div style="padding-left: 970px">
+    <a class="btn btn-danger" href="{{ path('cours_show') }}">List de cours</a>
+    </div>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit" class="btn btn-success">Ajouter</button>
+    {{ form_end(form) }}
+    {{ form_row(form.brochure) }}
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block title%}Liste des notes{% endblock %}
+{% block body %}
+
+    {{ form_start(form) }}
+    <div class="form-row align-items-end" >
+        <div class="col"> {{ form_row(form.classe) }} </div>
+        <div class="col"> <div class="form-group">
+                <button type="submit" class="btn btn-success">Rechercher</button>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+    {% if notes %}
+        <table id="notes" class="table table-striped">
+            <thead> <tr> <th>Liste</th> <th>Etudiant</th><th>Note</th><th>Actions</th>
+                {% set count = 0 %}
+            </tr> </thead> <tbody> {% for note in notes %}
+                {% set count = count + 1 %}
+                <tr> <td>Note {{ count }}</td>
+                    <td>{{  note.etudiant.nom }} {{  note.etudiant.prenom }}</td>
+                    <td>{{ note.note }}</td>
+
+                    <td> <a href="/notes/{{ note.id}}" class="btn btn-dark">Détails</a>
+                        <a href="/notes/edit/{{ note.id }}" class="btn btn-dark">Modifier</a>
+                     <!--   <a href="/notes/delete/{{ note.id }}" class="btn btn-danger" onclick="return confirm('Etes-vous sûr de supprimer cette note?');">Supprimer</a> -->
+                    </td>
+                    </td> </tr> {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}<p>Aucune note</p> {% endif %} {% endblock %}
