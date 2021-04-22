@@ -1,0 +1,39 @@
+{% extends 'base2.html.twig' %}
+{% block title %}Ajouter cours{% endblock %}
+{% block body %}
+
+
+    {{ form_start(form) }}
+    <div style="padding-top: 10px" class="form-row align-items-end" >
+        <div class="col"> {{ form_row(form.matiere) }} </div>
+        <div class="col"> <div class="form-group">
+                <button type="submit" class="btn btn-success">Rechercher</button>
+            </div>
+
+        </div>
+
+    </div>
+    {{ form_end(form) }}
+
+    <h3>Liste de cours</h3>
+
+    <div class="container" style="padding-top: 20px">
+        <table style="padding-top: 50px" class="table table-striped">
+            <thead><tr><th>Nom</th><th>Action</th></tr></thead>
+            <tbody>
+            {% for cour in cours %}
+                <tr>
+                    <td>{{ cour.getNomCours }}</td>
+                    <td>
+                        <a href="{{ asset ('uploads/brochures/' ~ cour.brochure) }}"
+                           class="btn btn-dark">Montrer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}
