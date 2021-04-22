@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -24,11 +27,6 @@ class User
     /**
      * @ORM\Column(type="string", length=30)
      */
-    private $user_name;
-
-    /**
-     * @ORM\Column(type="string", length=30)
-     */
     private $nom;
 
     /**
@@ -39,49 +37,37 @@ class User
     /**
      * @ORM\Column(type="string", length=30)
      */
+    private $user_name;
+
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
     private $email;
 
     /**
-     * @Assert\DateTime
-     * @ORM\Column(name="date_evenement", type="datetime")
-     */
-    private $date_de_naissance;
-
-    /**
-     * @ORM\Column(type="string", length=30)
-     */
-    private $role;
-
-    /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=20)
+     * @Assert\Length(
+     * min = 8,
+     * max = 20,
+     * minMessage = "Le mot de passe doit comporter au moins {{ limit }} caractères",
+     * maxMessage = "Le mot de pass doit comporter au plus {{ limit }} caractères"
+     * )
      */
     private $Mdp;
 
     /**
-     * @ORM\OneToMany(targetEntity=Evenement::class, mappedBy="Id_user")
+     * @ORM\Column(type="date")
      */
-    private $evenements;
+    private $date_de_naissance;
 
-    public function __construct()
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $role;
+
+    public function getId(): ?int
     {
-        $this->evenements = new ArrayCollection();
-    }
-
-    public function getId_user(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getUserName(): ?string
-    {
-        return $this->user_name;
-    }
-
-    public function setUserName(string $user_name): self
-    {
-        $this->user_name = $user_name;
-
-        return $this;
+        return $this->id_user;
     }
 
     public function getNom(): ?string
@@ -108,6 +94,18 @@ class User
         return $this;
     }
 
+    public function getUserName(): ?string
+    {
+        return $this->user_name;
+    }
+
+    public function setUserName(string $user_name): self
+    {
+        $this->user_name = $user_name;
+
+        return $this;
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -116,30 +114,6 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getDateDeNaissance(): ?\DateTimeInterface
-    {
-        return $this->date_de_naissance;
-    }
-
-    public function setDateDeNaissance(\DateTimeInterface $date_de_naissance): self
-    {
-        $this->date_de_naissance = $date_de_naissance;
-
-        return $this;
-    }
-
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): self
-    {
-        $this->role = $role;
 
         return $this;
     }
@@ -156,32 +130,26 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection|Evenement[]
-     */
-    public function getEvenements(): Collection
+    public function getDateDeNaissance(): ?\DateTime
     {
-        return $this->evenements;
+        return $this->date_de_naissance;
     }
 
-    public function addEvenement(Evenement $evenement): self
+    public function setDateDeNaissance(\DateTime $date_de_naissance): self
     {
-        if (!$this->evenements->contains($evenement)) {
-            $this->evenements[] = $evenement;
-            $evenement->setIdUser($this);
-        }
+        $this->date_de_naissance = $date_de_naissance;
 
         return $this;
     }
 
-    public function removeEvenement(Evenement $evenement): self
+    public function getRole(): ?string
     {
-        if ($this->evenements->removeElement($evenement)) {
-            // set the owning side to null (unless already changed)
-            if ($evenement->getIdUser() === $this) {
-                $evenement->setIdUser(null);
-            }
-        }
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }
